@@ -48,20 +48,14 @@ def check_for_duplicate(
 # Return list of Books 
 @router.get("/", response_model=list[BookRepsonse])
 def read_all(skip: int = 0, limit: int = 10, db: Session = session):
-    books = db.query(Books).offset(skip).limit.all()
+    books = db.query(Books).offset(skip).limit(limit).all()    
     return books
 
 
 #Read one book 
 @router.get("/{book_id}", response_model=BookRepsonse)
 def read_one (book_id: int, db:Session = Depends(get_db)):
-    books = db.query(Books).filter(Books.id == book_id).first()
-
-    if books is None:
-        raise HTTPException(status_code=404, detail="Book not found")
-    return books
-
-
+    return get_book_or_404(book_id, db)
 
 
 #Update Book

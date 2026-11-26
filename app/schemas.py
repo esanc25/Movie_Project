@@ -19,25 +19,3 @@ class BookUpdate(BookBase):
 class BookRepsonse (BookBase):
     id: int  # include `id` in the response schema
     model_config = ConfigDict(from_attributes=True)    
-
-
-# Everything for MOVIE
-class MovieBase(BaseModel): 
-    title            : str = Field(description = "Name of Movie")
-    director         : str = Field(description = "Who directed the movie")
-    release_year     : int = Field(description = "Year the movie was released")
-    runtime_minutes  : int = Field(description = "How long is the movie (minutes)")
-    description      : str = Field(description = "A breif summary of the movie")
-    image_url        : str = Field(description = "URL to image related to movie")
-
-
-class MovieCreate(MovieBase):
-    pass
-
-class MovieUpdate(MovieBase):
-    pass
-
-class MovieResponse(MovieBase):
-    id: int  # inude `id` in the response schema
-    model_config = ConfigDict(from_attributes=True)    
-
