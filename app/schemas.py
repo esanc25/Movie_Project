@@ -2,7 +2,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 #EVERYTHING FOR BOOK
 class BookBase(BaseModel): 
-    title        : str = Field(description = "Name of book")
+    title        : str = Field(description = "Name of book") 
     author       : str = Field(description = "Name of who wrote the book")
     release_year : int = Field(description = "Year the book was released")
     page_length  : int = Field(description = "How many pages the book has")

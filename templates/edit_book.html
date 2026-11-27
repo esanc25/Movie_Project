@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Book{% endblock %}
+
+{% block content %}
+    <h1>Edit Book</h1>
+
+    {% if updated %}
+        <p class="success">Your book was successfully updated!</p>
+    {% endif %}
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST"
+          action="{{ url_for('edit_book', book_id=book.id) }}">
+
+        <p>
+            <label for="title">Title</label><br>
+            <input id="title" name="title"
+                   value="{{ book.title }}" required>
+        </p>
+
+        <p>
+            <label for="author">Author</label><br>
+            <input id="author" name="author"
+                   value="{{ book.author }}" required>
+        </p>
+
+        <p>
+            <label for="release_year">Release Year</label><br>
+            <input type="number" id="release_year" name="release_year"
+                   value="{{ book.release_year }}" required>
+        </p>
+
+        <p>
+            <label for="page_length">Page Length</label><br>
+            <input type="number" id="page_length" name="page_length"
+                   value="{{ book.page_length }}" required>
+        </p>
+
+        <p>
+            <label for="description">Short Summary</label><br>
+            <textarea id="description" name="description">{{ book.description }}</textarea>
+        </p>
+
+        <p>
+            <label for="image_url">Cover Image</label><br>
+            <input id="image_url" name="image_url" type="url"
+                   value="{{ book.image_url }}">
+        </p>
+
+        <button type="submit">Save Changes</button>
+
+    </form>
+{% endblock %}

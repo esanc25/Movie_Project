@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Delete book{% endblock %}
+
+{% block content %}
+    <h1>Delete Book</h1>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('delete') }}">
+        <p>
+            <label for="id">Book ID</label><br>
+            <input type="number" id="id" name="id" required min="1">
+        </p>
+
+        <button type="submit">Delete Book</button>
+    </form>
+{% endblock %}

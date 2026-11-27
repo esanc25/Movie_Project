@@ -45,9 +45,9 @@ def check_for_duplicate(
         )
 
 
-# Return list of Books 
+# Return list of ALL Books 
 @router.get("/", response_model=list[BookRepsonse])
-def read_all(skip: int = 0, limit: int = 10, db: Session = session):
+def read_all(skip: int = 0, limit: int = 100, db: Session = session):
     books = db.query(Books).offset(skip).limit(limit).all()    
     return books
 
@@ -59,12 +59,8 @@ def read_one (book_id: int, db:Session = Depends(get_db)):
 
 
 #Update Book
-@router.put(
-    "/{book_id}", response_model=BookRepsonse, responses={**NOT_FOUND, **CONFLICT}
-)
-def update_book(
-    book_id: int, book: BookUpdate, db: Session = Depends(get_db)
-):
+@router.put( "/{book_id}", response_model=BookRepsonse, responses={**NOT_FOUND, **CONFLICT})
+def update_book(book_id: int, book: BookUpdate, db: Session = Depends(get_db)):
     """
     Replace every field of an existing book.
 
@@ -75,17 +71,12 @@ def update_book(
     check_for_duplicate(book.title, book.author, db, ignore_id=book_id)
     for field, value in book.model_dump().items():
         setattr(db_book, field, value)
-    db.commit()
+    db.commit()                                                                      #CHANGE HERE
     db.refresh(db_book)
     return db_book
 
 #Posting book 
-@router.post(
-    "/",
-    response_model=BookRepsonse,                #endpoint uses this to ensure the data matches BookResponse schema
-    status_code=status.HTTP_201_CREATED, 
-    responses=CONFLICT,
-)
+@router.post("/", response_model=BookRepsonse, status_code=status.HTTP_201_CREATED, responses=CONFLICT)
 def create_book(book: BookCreate, db: Session = Depends(get_db)): #BookCreate validated request body
     """
     Create a new book and return it with its new ID.
@@ -101,9 +92,7 @@ def create_book(book: BookCreate, db: Session = Depends(get_db)): #BookCreate va
     return db_book
 
 #Delete Book
-@router.delete(
-    "/{book_id}", status_code=status.HTTP_204_NO_CONTENT, responses=NOT_FOUND
-)
+@router.delete("/{book_id}", status_code=status.HTTP_204_NO_CONTENT, responses=NOT_FOUND)
 def delete_book(book_id: int, db: Session = Depends(get_db)):
     """Delete a book. Returns 204 with no body, or 404 if no book has that ID."""
     db_book = get_book_or_404(book_id, db)
